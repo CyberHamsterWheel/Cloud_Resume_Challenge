@@ -1,0 +1,30 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-infra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: test get-function
+        run: |
+          cd My-Cloud-Resume/get-function
+          pytest -v
+          cd ..
+      - name: test put-function
+        run: |
+          cd My-Cloud-Resume/put-function
+          pytest -v
+          cd ..
