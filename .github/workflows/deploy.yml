@@ -20,11 +20,11 @@ jobs:
           python-version: "3.11"
       - name: test get_function
         run: |
-          cd My-Cloud-Resume/get_function
+          cd get_function
           pytest -v
           cd ..
       - name: test put_function
         run: |
-          cd My-Cloud-Resume/put_function
+          cd put_function
           pytest -v
           cd ..
