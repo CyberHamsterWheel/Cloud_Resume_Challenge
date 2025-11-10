@@ -1,7 +1,7 @@
 import json
 from unittest.mock import patch, MagicMock
 
-from get_function.app import get_function
+from .app import get_function
 
 def test_get_function_returns_count():
     event = {}
