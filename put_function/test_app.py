@@ -1,6 +1,9 @@
 # get_function/test_basic.py
 import json
+import os
 from unittest.mock import patch, MagicMock
+
+os.environ.setdefault("AWS_DEFAULT_REGION", "us-east-1")
 
 from .app import put_function
 
@@ -11,6 +14,7 @@ def test_put_function_returns_count():
     mock_item = {'Item': {'visit_count': 5}}
 
     with patch('boto3.Session') as mock_session:
+        mock_session.return_value.region_name = 'us-east-1'
         mock_dynamodb = MagicMock()
         mock_table = MagicMock()
         mock_table.get_item.return_value = mock_item
@@ -23,5 +27,5 @@ def test_put_function_returns_count():
 
         assert result['statusCode'] == 200
         body = json.loads(result['body'])
-        assert body['count'] == 6  # 5 from DB + 1
+        assert body['count'] == 6
 
