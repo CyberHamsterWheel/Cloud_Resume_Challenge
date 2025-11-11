@@ -2,7 +2,7 @@ import json
 import boto3
 import pytest
 from moto import mock_aws
-from app import put_function
+from .app import put_function
 
 TEST_TABLE_NAME = 'resume-website-visitor-counter'
 
