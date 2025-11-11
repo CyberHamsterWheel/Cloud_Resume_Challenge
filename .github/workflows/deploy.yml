@@ -23,17 +23,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest boto3 moto
       - name: test get_function
+        run: |
+          cd get_function
+          pytest -v
+          cd ..
+      - name: test put_function
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
           AWS_SESSION_TOKEN: test
           AWS_SECURITY_TOKEN: test
           AWS_DEFAULT_REGION: us-east-1
-        run: |
-          cd get_function
-          pytest -v
-          cd ..
-      - name: test put_function
         run: |
           cd put_function
           pytest -v
