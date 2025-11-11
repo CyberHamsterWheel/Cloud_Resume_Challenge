@@ -24,6 +24,10 @@ jobs:
           pip install pytest
           pip install boto3
       - name: test get_function
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_SESSION_TOKEN: test
         run: |
           cd get_function
           pytest -v
