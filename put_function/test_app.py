@@ -1,30 +1,63 @@
 import json
-import os
-from unittest.mock import patch, MagicMock
+import boto3
+import pytest
+from moto import mock_aws
+from app import put_function
 
-os.environ.setdefault("AWS_DEFAULT_REGION", "us-east-1")
+TEST_TABLE_NAME = 'resume-website-visitor-counter'
 
-from .app import put_function
+@mock_aws
+def test_put_function_increments_count():
 
-def test_put_function_returns_count():
+    dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
+    dynamodb.create_table(
+        TableName=TEST_TABLE_NAME,
+        KeySchema=[{'AttributeName': 'ID', 'KeyType': 'HASH'}],
+        AttributeDefinitions=[{'AttributeName': 'ID', 'AttributeType': 'S'}],
+        ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
+    )
+    
+    initial_count = 5
+    dynamodb.Table(TEST_TABLE_NAME).put_item(
+        Item={'ID': 'visit_count', 'visit_count': initial_count}
+    )
+
     event = {}
     context = {}
+    result = put_function(event, context)
 
-    mock_item = {'Item': {'visit_count': 5}}
+    assert result['statusCode'] == 200
 
-    with patch('boto3.Session') as mock_session:
-        mock_session.return_value.region_name = 'us-east-1'
-        mock_dynamodb = MagicMock()
-        mock_table = MagicMock()
-        mock_table.get_item.return_value = mock_item
-        mock_table.put_item.return_value = {}
-        mock_table.update_item.return_value = {}
-        mock_dynamodb.Table.return_value = mock_table
-        mock_session.return_value.resource.return_value = mock_dynamodb
+    body = json.loads(result['body'])
+    expected_new_count = initial_count + 1
+    assert body['count'] == expected_new_count
 
-        result = put_function(event, context)
+    table = dynamodb.Table(TEST_TABLE_NAME)
+    response = table.get_item(Key={'ID': 'visit_count'})
+    assert response['Item']['visit_count'] == expected_new_count
 
-        assert result['statusCode'] == 200
-        body = json.loads(result['body'])
-        assert body['count'] == 6
 
+@mock_aws
+def test_put_function_initializes_count_if_missing():
+
+    dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
+    dynamodb.create_table(
+        TableName=TEST_TABLE_NAME,
+        KeySchema=[{'AttributeName': 'ID', 'KeyType': 'HASH'}],
+        AttributeDefinitions=[{'AttributeName': 'ID', 'AttributeType': 'S'}],
+        ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
+    )
+
+    event = {}
+    context = {}
+    result = put_function(event, context)
+
+    assert result['statusCode'] == 200
+
+    body = json.loads(result['body'])
+    expected_new_count = 1 
+    assert body['count'] == expected_new_count
+
+    table = dynamodb.Table(TEST_TABLE_NAME)
+    response = table.get_item(Key={'ID': 'visit_count'})
+    assert response['Item']['visit_count'] == expected_new_count
