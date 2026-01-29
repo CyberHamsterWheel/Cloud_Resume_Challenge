@@ -49,6 +49,11 @@ Resources:
       SubjectAlternativeNames:
         - "www.iohannah.com"
       ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: "iohannah.com"
+          HostedZoneId: "Z0505724XG50VZTQ400S"
+        - DomainName: "www.iohannah.com"
+          HostedZoneId: "Z0505724XG50VZTQ400S"
 
   MyCloudFrontOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
