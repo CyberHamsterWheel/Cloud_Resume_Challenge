@@ -64,6 +64,16 @@ Resources:
         DNSName: !GetAtt MyCloudFrontDistribution.DomainName
         HostedZoneId: Z2FDTNDATAQYW2
 
+  MyCnameRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: "iohannah.com."
+      Name: "www.iohannah.com."
+      Type: CNAME
+      TTL: "300"
+      ResourceRecords:
+        - "iohannah.com."
+
   MyCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
