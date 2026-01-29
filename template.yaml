@@ -46,6 +46,8 @@ Resources:
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: iohannah.com
+      SubjectAlternativeNames:
+        - "www.iohannah.com"
       ValidationMethod: DNS
 
   MyCloudFrontOAI:
