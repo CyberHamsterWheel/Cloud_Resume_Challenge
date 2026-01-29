@@ -79,7 +79,7 @@ Resources:
       Type: CNAME
       TTL: "300"
       ResourceRecords:
-        - "iohannah.com."
+        - !GetAtt MyCloudFrontDistribution.DomainName
 
   MyCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
