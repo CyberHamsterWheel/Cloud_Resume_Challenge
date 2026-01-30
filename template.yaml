@@ -91,8 +91,9 @@ Resources:
         DefaultRootObject: index.html
         Aliases:
           - iohannah.com
+          - www.iohannah.com
         ViewerCertificate:
-          AcmCertificateArn: arn:aws:acm:us-east-1:715841361947:certificate/cd3d801c-e7d9-4f65-8028-ca8e9bfb8d2f
+          AcmCertificateArn: !Ref MyCertificate
           SslSupportMethod: sni-only
         DefaultCacheBehavior:
           AllowedMethods:
