@@ -46,14 +46,9 @@ Resources:
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: iohannah.com
-      SubjectAlternativeNames:
-        - "www.iohannah.com"
+        SubjectAlternativeNames:
+          - www.iohannah.com
       ValidationMethod: DNS
-      DomainValidationOptions:
-        - DomainName: "iohannah.com"
-          HostedZoneId: "Z0505724XG50VZTQ400S"
-        - DomainName: "www.iohannah.com"
-          HostedZoneId: "Z0505724XG50VZTQ400S"
 
   MyCloudFrontOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -74,12 +69,12 @@ Resources:
   MyCnameRecord:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneName: "iohannah.com."
-      Name: "www.iohannah.com."
+      HostedZoneId: Z0505724XG50VZTQ400S
+      Name: www.iohannah.com.
       Type: CNAME
       TTL: "300"
       ResourceRecords:
-        - !GetAtt MyCloudFrontDistribution.Aliases
+        - iohannah.com
 
   MyCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
