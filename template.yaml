@@ -5,6 +5,13 @@ Description: >
 
   Sample SAM Template for My-Cloud-Resume
 
+Parameters:
+  HostedZoneId:
+    Type: String
+    Description: "Route 53 Hosted Zone ID"
+  DomainName:
+    Type: String
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
@@ -45,9 +52,9 @@ Resources:
   MyCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: iohannah.com
+      DomainName: !Ref DomainName
       SubjectAlternativeNames:
-        - www.iohannah.com
+        - !Sub "www.${DomainName}"
       ValidationMethod: DNS
 
   MyCloudFrontOAI:
@@ -59,8 +66,8 @@ Resources:
   MyRoute53RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: Z0505724XG50VZTQ400S
-      Name: iohannah.com
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref DomainName
       Type: A
       AliasTarget:
         DNSName: !GetAtt MyCloudFrontDistribution.DomainName
@@ -69,29 +76,29 @@ Resources:
   MyCnameRecord:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: Z0505724XG50VZTQ400S
-      Name: www.iohannah.com.
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub "www.${DomainName}"
       Type: CNAME
       TTL: "300"
       ResourceRecords:
-        - iohannah.com
+        - !GetAtt MyCloudFrontDistribution.DomainName
 
   MyCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: my-cloud-portfolio-website.s3.amazonaws.com
+          - DomainName: !GetAtt MyWebsite.DomainName
             Id: S3Origin
             S3OriginConfig:
-              OriginAccessIdentity: origin-access-identity/cloudfront/E2CX0KSGJA7L8C
+              OriginAccessIdentity: !Ref MyCloudFrontOAI
             # CustomOriginConfig:
             #   OriginProtocolPolicy: match-viewer
         Enabled: "true"
         DefaultRootObject: index.html
         Aliases:
-          - iohannah.com
-          - www.iohannah.com
+          - !Ref DomainName
+          - !Sub "www.${DomainName}"
         ViewerCertificate:
           AcmCertificateArn: !Ref MyCertificate
           SslSupportMethod: sni-only
