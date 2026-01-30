@@ -79,7 +79,7 @@ Resources:
       Type: CNAME
       TTL: "300"
       ResourceRecords:
-        - !GetAtt MyCloudFrontDistribution.DomainName
+        - !GetAtt MyCloudFrontDistribution.Aliases
 
   MyCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
