@@ -91,7 +91,7 @@ Resources:
           - DomainName: !GetAtt MyWebsite.DomainName
             Id: S3Origin
             S3OriginConfig:
-              OriginAccessIdentity: !Ref MyCloudFrontOAI
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${MyCloudFrontOAI}"
             # CustomOriginConfig:
             #   OriginProtocolPolicy: match-viewer
         Enabled: "true"
