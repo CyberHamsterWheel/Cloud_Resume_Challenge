@@ -40,7 +40,8 @@ Resources:
         Statement:
           - Sid: PublicReadForGetBucketObjects
             Effect: Allow
-            Principal: "*"
+            Principal:
+              CanonicalUser: !GetAtt MyCloudFrontOAI.S3CanonicalUserId
             Action: "s3:GetObject"
             Resource: !Join
               - ""
