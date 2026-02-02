@@ -4,7 +4,7 @@
 
 An end-to-end serverless web application and visitor counter built on AWS using Infrastructure as Code (IaC) and automated GitOps CI/CD.  
 
-🔗 Live Demo: [iohannah.com](iohannah.com)  
+🔗 Live Demo: [iohannah.com](https://iohannah.com)  
 🔗 Technical Article: [Read the technical deep-dive on how i built this project.](https://medium.com/@hannahleung.work/building-my-cloud-resume-my-hands-on-adventure-with-aws-0b2a4436955f)  
 
 ## :rocket: Architecture Overview  
